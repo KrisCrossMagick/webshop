@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const usersRepo = require('./repositories/users');
+
+const port = 3000;
 
 const app = express();
 //this next line adds the bodyParser to every single route in the code
@@ -24,11 +27,19 @@ app.get('/', (req, res) => {
 //ORIGINAL: app.post('/', bodyParser.urlencoded({ extended: true }), (req, res) => {
 //we moved it to the top under app = express() - so it will be used in ALL routing func as middleware func without
 //having to specify it every single time
-app.post('/', (req, res) => {
-	console.log(req.body);
-	res.send('info received!');
+app.post('/', async (req, res) => {
+	const { email, password, passwordConfirmation } = req.body;
+
+	//check to see if the user with this email is already present in the db
+	const existingUser = await usersRepo.getOneBy({ email });
+	if (existingUser) return res.send('Email is in use');
+
+	if (password !== passwordConfirmation)
+		return res.send('password and confirmation must match!');
+
+	res.send('account created!');
 });
 
-app.listen(3000, () => {
-	console.log('listening on port 3000');
+app.listen(port, () => {
+	console.log(`listening on port ${port}`);
 });

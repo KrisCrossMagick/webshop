@@ -97,16 +97,11 @@ class UsersRepository {
 	}
 }
 
-const test = async () => {
-	const repo = new UsersRepository('users.json');
-	//await repo.create({ email: 'test@test.com', password: 'niet veilig' });
-	//const users = await repo.getAll();
-	//const user = await repo.getOne('2735fef2');
-	//await repo.delete('2735fef2');
-	//await repo.update('7804c872', { password: 'TisMOielijk' });
-
-	const user = await repo.getOneBy({ password: 'TisMOielijk' });
-	console.log(user);
-};
-
-test();
+/**
+ * we are exporting an instance of the class instead of the class itself
+ * this assures us that we can control the name of the file used to store the users in
+ * furthermore we will be able to immediately start using the class methods
+ * This is much safer option to avoid hard to find errors in code - because we ONLY NEED ONE instance of this class
+ * in the whole project!!
+ */
+module.exports = new UsersRepository('users.json');
