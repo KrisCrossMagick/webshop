@@ -54,13 +54,54 @@ class UsersRepository {
 	randomId() {
 		return crypto.randomBytes(4).toString('hex');
 	}
+
+	async getOne(id) {
+		const records = await this.getAll();
+		return records.find((record) => record.id === id);
+	}
+
+	async delete(id) {
+		const records = await this.getAll();
+		//only records with true are retained, so we want it to be true in case it does not match
+		const filteredRecords = records.filter((record) => record.id !== id);
+		await this.writeAll(filteredRecords);
+	}
+
+	async update(id, attrs) {
+		const records = await this.getAll();
+		const record = records.find((record) => record.id === id);
+
+		if (!record) throw new Error(`Record with id ${id} was not found!`);
+
+		//the Object.assign() takes all the elements from the second argument (SOURCE) and puts them in the first argument (TARGET)
+		//updating the existing ones or writing new ones if needed
+		Object.assign(record, attrs);
+
+		await this.writeAll(records);
+	}
+
+	async getOneBy(filters) {
+		const records = await this.getAll();
+
+		//here we use for...of statement to iterate through an array!
+		for (let record of records) {
+			let found = true;
+
+			//here we use the for...in statement to iterate through an object!
+			for (let key in filters) {
+				if (record[key] !== filters[key]) found = false;
+			}
+
+			if (found) return record;
+		}
+	}
 }
 
-const test = async () => {
-	const repo = new UsersRepository('users.json');
-	await repo.create({ email: 'test@test.com', password: 'niet veilig' });
-	const users = await repo.getAll();
-	console.log(users);
-};
-
-test();
+/**
+ * we are exporting an instance of the class instead of the class itself
+ * this assures us that we can control the name of the file used to store the users in
+ * furthermore we will be able to immediately start using the class methods
+ * This is much safer option to avoid hard to find errors in code - because we ONLY NEED ONE instance of this class
+ * in the whole project!!
+ */
+module.exports = new UsersRepository('users.json');
