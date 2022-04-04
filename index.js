@@ -6,6 +6,12 @@ const authRouter = require('./routes/admin/auth');
 const port = 3000;
 
 const app = express();
+
+//the line below will make the public folder accessible to the outside world
+//it will change every web request, this will now be the first "route" that will be verified to see
+//if a matching file is found
+app.use(express.static('public'));
+
 //this next line adds the bodyParser to every single route in the code
 //the bodyParser is a middleware function
 //it is possible to have multiple middleware function in a row, seperated by a ','
