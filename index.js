@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const authRouter = require('./routes/admin/auth');
+const productsRouter = require('./routes/admin/products');
 
 const port = 3000;
 
@@ -23,6 +24,7 @@ app.use(cookieSession({ keys: [ 'k:ejfh   meof46506qadq' ] }));
 //since we moved the code to the auth file we now after importing it at the top
 //need to link it back up with our app instance
 app.use(authRouter);
+app.use(productsRouter);
 
 app.listen(port, () => {
 	console.log(`listening on port ${port}`);
