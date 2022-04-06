@@ -20,7 +20,9 @@ router.post(
 		// if (!errors.isEmpty())
 		// 	return res.send(productsNewTemplate({ req, errors }));
 
-		console.log(errors);
+		req.on('data', (data) => {
+			console.log(data.toString());
+		});
 
 		return res.send('submitted');
 	}

@@ -14,7 +14,7 @@ module.exports = {
 		.trim()
 		.toFloat()
 		.isFloat({ min: 1 })
-		.withMessage('Must be a valid number'),
+		.withMessage('Must be a valid number > 1'),
 	requireEmail                : check('email')
 		.trim()
 		.normalizeEmail()
