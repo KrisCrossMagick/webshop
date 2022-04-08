@@ -9,5 +9,10 @@ module.exports = {
 			//in case no errors were encountered, go to the next middleware function
 			next();
 		};
+	},
+	requireAuth(req, res, next) {
+		if (!req.session.userId) return res.redirect('/signin');
+		//in case no errors were encountered, go to the next middleware function
+		next();
 	}
 };

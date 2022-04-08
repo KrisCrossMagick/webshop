@@ -35,7 +35,7 @@ router.post(
 		//then we add the userId property (can be anything we want, this name is prefered)
 		req.session.userId = user.id;
 
-		res.send('account created!');
+		res.redirect('/admin/products');
 	}
 );
 
@@ -60,7 +60,7 @@ router.post(
 
 		req.session.userId = user.id;
 
-		res.send('You are signed in');
+		res.redirect('/admin/products');
 	}
 );
 
