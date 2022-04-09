@@ -58,7 +58,10 @@ router.post(
 	requireAuth,
 	upload.single('image'), //the 'image' is the name of the input in the html section
 	[ requireTitle, requirePrice ],
-	handleErrors(productsEditTemplate),
+	handleErrors(productsEditTemplate, async (req) => {
+		const product = await productsRepo.getOne(req.params.id);
+		return { product };
+	}),
 	async (req, res) => {
 		const changes = req.body;
 		if (req.file) changes.image = req.file.buffer.toString('base64');
@@ -71,5 +74,11 @@ router.post(
 		res.redirect('/admin/products');
 	}
 );
+
+router.post('/admin/products/:id/delete', requireAuth, async (req, res) => {
+	await productsRepo.delete(req.params.id);
+
+	res.redirect('/admin/products');
+});
 
 module.exports = router;
