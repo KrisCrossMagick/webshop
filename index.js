@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session');
 const authRouter = require('./routes/admin/auth');
 const adminProductsRouter = require('./routes/admin/products');
 const productsRouter = require('./routes/products');
+const cartsRouter = require('./routes/carts');
 
 const port = 3000;
 
@@ -27,6 +28,7 @@ app.use(cookieSession({ keys: [ 'k:ejfh   meof46506qadq' ] }));
 app.use(authRouter);
 app.use(adminProductsRouter);
 app.use(productsRouter);
+app.use(cartsRouter);
 
 app.listen(port, () => {
 	console.log(`listening on port ${port}`);
